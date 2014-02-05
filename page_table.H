@@ -49,6 +49,7 @@ private:
 
   /* DATA FOR CURRENT PAGE TABLE */
   unsigned long        * page_directory;     /* where is page directory located? */
+  unsigned long        * page_table;
 
 public:
   static const unsigned int PAGE_SIZE        = FramePool::FRAME_SIZE; /* in bytes */
