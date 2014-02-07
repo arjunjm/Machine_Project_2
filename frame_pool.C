@@ -15,9 +15,9 @@ FramePool::FramePool(unsigned long _base_frame_no,
    unsigned long frame_address = _base_frame_no * (FramePool::FRAME_SIZE);
    do
    {
-       free_frame_list.push_back(temp);
-       temp = temp + FramePool::FRAME_SIZE;
-   }while (temp < (_base_frame_no + _nframes * (FramePool::FRAME_SIZE));
+       free_frame_list.push_back(frame_address);
+       frame_address = frame_address + FramePool::FRAME_SIZE;
+   }while (frame_address < (_base_frame_no + _nframes * (FramePool::FRAME_SIZE)));
 }
 
 unsigned long FramePool::get_frame()
