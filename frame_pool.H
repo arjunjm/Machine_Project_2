@@ -24,6 +24,9 @@
 /* INCLUDES */
 /*--------------------------------------------------------------------------*/
 
+#include <list>
+
+using namespace std;
 /* -- (none) -- */
 
 /*--------------------------------------------------------------------------*/
@@ -39,6 +42,10 @@
 class FramePool {
 private:
      /* -- DEFINE YOUR FRAME POOL DATA STRUCTURE(s) HERE. */
+   unsigned long base_frame_number;
+   unsigned long number_of_frames_managed;
+   unsigned long managament_frame_number;
+   list<unsigned long> free_frame_list;
 
 public:
    static const unsigned int FRAME_SIZE = 4096;

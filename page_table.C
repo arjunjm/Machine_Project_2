@@ -12,16 +12,16 @@ PageTable::PageTable()
 
     /* The following is to map the first 4 MB of memory */
 
-    for (int i = 0; i < ENTRIES_PER_PAGE; i++)
+    for (int i = 0; i < PageTable::ENTRIES_PER_PAGE; i++)
     {
         /* The last 3 bits stand for superviser/user, read/write and present/non-present status respectively.
          * We set the these attribute bits to superviser, read/write and present */
         page_table[i] = address | 3;
-        address       = address + 4096;
+        address       = address + PageTable::PAGE_SIZE;
     }
 
     /* The page table initialized above is stored in the page directory */
-    page_directory[0] = page_table;
+    page_directory[0] = *page_table;
 
     /* We then set the attribute bits to superviser, read/write and present */
     page_directory[0] |= 3;
@@ -31,7 +31,7 @@ PageTable::PageTable()
      * Also, we mark the attribute sets' present status to 0.
      * Hence we do a bitwise OR by 2
      */
-    for (int i = 1; i < ENTRIES_PER_PAGE; i++)
+    for (int i = 1; i < PageTable::ENTRIES_PER_PAGE; i++)
     {
         page_directory[1] = 0 | 2;
     }
@@ -54,7 +54,9 @@ void PageTable::load()
      * by loading the page directory address into 
      * the CR3 register
      */
-    write_cr3(page_directory);
+    unsigned long page_dir_addr = (unsigned long) page_directory;
+    current_page_table = this;
+    write_cr3(page_dir_addr);
 }
 
 void PageTable::enable_paging()
