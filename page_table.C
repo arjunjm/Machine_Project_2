@@ -1,12 +1,19 @@
 #include "page_table.H"
 
+/* Definitios of static class members */
+PageTable* PageTable::current_page_table;
+FramePool* PageTable::kernel_mem_pool;    
+FramePool* PageTable::process_mem_pool;
+unsigned long PageTable::shared_size;        
+unsigned int PageTable::paging_enabled;
+
 PageTable::PageTable()
 {
     /* Any 4k-aligned address can be used for the page_directory */
-    page_directory = (unsigned long*) 0X9C000;
+    page_directory = reinterpret_cast <unsigned long*> (kernel_mem_pool->get_frame() * PageTable::PAGE_SIZE);
 
     /* The page table follows the page_directory at the next 4k-aligned address */
-    page_table     = (unsigned long*) 0X9D000;
+    page_table     = reinterpret_cast <unsigned long*> (kernel_mem_pool->get_frame() * PageTable::PAGE_SIZE);
 
     unsigned long address = 0;
 

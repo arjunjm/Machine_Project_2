@@ -20,7 +20,8 @@
 
 #define MB * (0x1 << 20)
 #define KB * (0x1 << 10)
-#define PROCESS_POOL_SIZE ((28 MB) / (4 KB))
+#define TOTAL_POOL_SIZE ((32 MB) / (4 KB))
+#define START_OFFSET ((2 MB) / (4 KB))
 
 
 /*--------------------------------------------------------------------------*/
@@ -34,9 +35,8 @@
 /*--------------------------------------------------------------------------*/
 
 typedef struct frame_element {
-    unsigned long frame_address;
-    bool is_accessible;
-    bool is_allocated;
+    unsigned long frame_number;
+    bool can_be_allocated;
 }frame_element_t;
 
 /*--------------------------------------------------------------------------*/
@@ -46,18 +46,15 @@ typedef struct frame_element {
 class FramePool {
 private:
      /* -- DEFINE YOUR FRAME POOL DATA STRUCTURE(s) HERE. */
+   static unsigned int number_of_free_frames;
    unsigned long base_frame_number;
    unsigned long number_of_frames_managed;
    unsigned long managament_frame_number;
 
    /*
-    * Since dynamic allocation is not possible now, we create an array of structures for 
-    * holding the free frames. Since the kernel frame pool is less than the process 
-    * pool, the kernel frames can easily be stored in this list. But the downside here 
-    * is that a lot of space is wasted for the kernel frame pool
-    */
-   frame_element_t free_frame_list[PROCESS_POOL_SIZE];
-   unsigned long number_of_free_frames;
+    * Since dynamic allocation is not possible now, we create an array of frame structures for 
+    * holding the free frames*/
+   static frame_element_t free_frame_list[TOTAL_POOL_SIZE];
 
 public:
    static const unsigned int FRAME_SIZE = 4096;
