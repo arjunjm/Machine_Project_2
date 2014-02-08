@@ -18,22 +18,26 @@
 /* DEFINES */
 /*--------------------------------------------------------------------------*/
 
-/* -- (none) -- */
+#define MB * (0x1 << 20)
+#define KB * (0x1 << 10)
+#define PROCESS_POOL_SIZE ((28 MB) / (4 KB))
+
 
 /*--------------------------------------------------------------------------*/
 /* INCLUDES */
 /*--------------------------------------------------------------------------*/
 
-#include <list>
-
-using namespace std;
 /* -- (none) -- */
 
 /*--------------------------------------------------------------------------*/
 /* DATA STRUCTURES */
 /*--------------------------------------------------------------------------*/
 
-/* -- (none) -- */
+typedef struct frame_element {
+    unsigned long frame_address;
+    bool is_accessible;
+    bool is_allocated;
+}frame_element_t;
 
 /*--------------------------------------------------------------------------*/
 /* F r a m e   P o o l  */
@@ -45,7 +49,15 @@ private:
    unsigned long base_frame_number;
    unsigned long number_of_frames_managed;
    unsigned long managament_frame_number;
-   list<unsigned long> free_frame_list;
+
+   /*
+    * Since dynamic allocation is not possible now, we create an array of structures for 
+    * holding the free frames. Since the kernel frame pool is less than the process 
+    * pool, the kernel frames can easily be stored in this list. But the downside here 
+    * is that a lot of space is wasted for the kernel frame pool
+    */
+   frame_element_t free_frame_list[PROCESS_POOL_SIZE];
+   unsigned long number_of_free_frames;
 
 public:
    static const unsigned int FRAME_SIZE = 4096;
