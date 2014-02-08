@@ -42,7 +42,6 @@ PageTable::PageTable()
     {
         page_directory[1] = 0 | 2;
     }
-
 }
 
 void PageTable::init_paging(FramePool * _kernel_mem_pool,

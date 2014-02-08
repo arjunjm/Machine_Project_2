@@ -13,7 +13,7 @@ FramePool::FramePool(unsigned long _base_frame_no,
     number_of_frames_managed = _nframes;
     managament_frame_number  = _info_frame_no;
 
-    /* 
+   /* 
      * Add the physical addresses of free frames to the frame pool list. 
      * The get_frame routine will allocate frames from this list
      */
