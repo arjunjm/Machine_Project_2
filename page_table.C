@@ -11,8 +11,6 @@ FramePool* PageTable::kernel_mem_pool;
 FramePool* PageTable::process_mem_pool;
 unsigned long PageTable::shared_size;        
 unsigned int PageTable::paging_enabled;
-//unsigned long* PageTable::page_directory;
-//unsigned long* PageTable::page_table;
 
 PageTable::PageTable()
 {
@@ -90,10 +88,10 @@ void PageTable::handle_fault(REGS * _r)
 {
     /* Page fault handler */
     
-    Console::puts("Page Fault Handler Called\n");
+    //Console::puts("Page Fault Handler Called\n");
     unsigned long addr = 0, page_dir_index = 0, page_table_index = 0, page_offset = 0;
     unsigned long page_fault_dir = read_cr2();
-    Console::puts("Virtual Address = ");
+    //Console::puts("Virtual Address = ");
     Console::putui(page_fault_dir);
 
     /* Page directory index is stored in the first 10 bits of the virtual address */ 
@@ -110,10 +108,8 @@ void PageTable::handle_fault(REGS * _r)
      * So allocate a frame from the kernel frame pool and mark the page as present.
      */
     {
-        Console::puts("Page table not present");
-        //PageTable::page_directory[page_dir_index] = ((PageTable::kernel_mem_pool->get_frame()) * PageTable::PAGE_SIZE ) | 3;    
         current_page_table->page_directory[page_dir_index] = ((PageTable::kernel_mem_pool->get_frame()) * PageTable::PAGE_SIZE ) | 3;    
     }
     ((unsigned long*)((current_page_table->page_directory[page_dir_index]) & 0xFFFFF000) )[page_table_index] = ( (PageTable::process_mem_pool->get_frame()) * (PageTable::PAGE_SIZE)) | 3;
-
+    
 }

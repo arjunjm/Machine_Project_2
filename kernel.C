@@ -88,9 +88,11 @@ int main() {
                               KERNEL_POOL_SIZE,
                               0);
     unsigned long process_mem_pool_info_frame = kernel_mem_pool.get_frame();
+
     FramePool process_mem_pool(PROCESS_POOL_START_FRAME,
                                PROCESS_POOL_SIZE,
                                process_mem_pool_info_frame);
+
     process_mem_pool.mark_inaccessible(MEM_HOLE_START_FRAME, MEM_HOLE_SIZE);
 
     /* -- INITIALIZE MEMORY (PAGING) -- */
