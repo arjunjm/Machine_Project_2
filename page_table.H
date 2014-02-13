@@ -49,9 +49,11 @@ private:
   static unsigned long   shared_size;        /* size of shared address space */
 
   /* DATA FOR CURRENT PAGE TABLE */
+  //static unsigned long        * page_directory;     /* where is page directory located? */
+  //static unsigned long        * page_table;
+
   unsigned long        * page_directory;     /* where is page directory located? */
   unsigned long        * page_table;
-
 public:
   static const unsigned int PAGE_SIZE        = FramePool::FRAME_SIZE; /* in bytes */
   static const unsigned int ENTRIES_PER_PAGE = 1024; /* in entries, duh! */
